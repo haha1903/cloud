@@ -17,6 +17,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.*;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,6 +34,12 @@ import java.util.Map;
  * DataYes
  */
 public class OpenstackContext {
+    private static final Logger log = LoggerFactory.getLogger(OpenstackContext.class);
+    public static final String IDENTITY = "identity";
+    public static final String COMPUTE = "compute";
+    public static final String NETWORK = "network";
+    public static final String IMAGE = "image";
+    public static final String VOLUME = "volume";
     private ObjectMapper objectMapper = new ObjectMapper();
     private final HttpClient client = new DefaultHttpClient();
     private String identityServiceUrl;
@@ -40,10 +48,13 @@ public class OpenstackContext {
     private String password;
     private String tenant;
     private String token;
+    private String computeUrl;
+    private String networkUrl;
+    private String imageUrl;
+    private String volumeUrl;
 
-    public OpenstackContext(String identityServiceUrl, String identityAdminUrl, String username, String password, String tenant) throws OgnlException, IOException, URISyntaxException {
+    public OpenstackContext(String identityServiceUrl, String username, String password, String tenant) throws OgnlException, IOException, URISyntaxException {
         this.identityServiceUrl = identityServiceUrl;
-        this.identityAdminUrl = identityAdminUrl;
         this.username = username;
         this.password = password;
         this.tenant = tenant;
@@ -51,9 +62,29 @@ public class OpenstackContext {
     }
 
     private void init() throws IOException, URISyntaxException, OgnlException {
-        Access access = post(identityServiceUrl + "/tokens", "auth", new Auth(username, password, tenant), "access", Access.class);
+        Access access = post(identityServiceUrl, "auth", new Auth(username, password, tenant), "access", Access.class);
         token = access.getToken().getId();
-        System.out.println(token);
+        List<ServiceCatalog> serviceCatalogs = access.getServiceCatalogs();
+        for (ServiceCatalog serviceCatalog : serviceCatalogs) {
+            if(typeIs(serviceCatalog, IDENTITY)) identityAdminUrl = getAdminURL(serviceCatalog);
+            if(typeIs(serviceCatalog, COMPUTE)) computeUrl = getInternalURL(serviceCatalog);
+            if(typeIs(serviceCatalog, NETWORK)) networkUrl = getInternalURL(serviceCatalog);
+            if(typeIs(serviceCatalog, IMAGE)) imageUrl = getInternalURL(serviceCatalog);
+            if(typeIs(serviceCatalog, VOLUME)) volumeUrl = getInternalURL(serviceCatalog);
+        }
+        log.debug("token = {}", token );
+    }
+
+    private String getInternalURL(ServiceCatalog serviceCatalog) {
+        return serviceCatalog.getEndpoints().get(0).getInternalURL();
+    }
+
+    private String getAdminURL(ServiceCatalog serviceCatalog) {
+        return serviceCatalog.getEndpoints().get(0).getAdminURL();
+    }
+
+    private boolean typeIs(ServiceCatalog serviceCatalog, String type) {
+        return type.equals(serviceCatalog.getType());
     }
 
     private Object getValue(String expression, String json) throws IOException, OgnlException {

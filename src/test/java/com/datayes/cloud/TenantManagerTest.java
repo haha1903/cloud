@@ -14,6 +14,16 @@ import static org.junit.Assert.assertEquals;
  */
 public class TenantManagerTest {
     @Test
+    public void testListTenant() throws Exception {
+        OpenstackContext openstackContext = new OpenstackContext("http://10.20.112.226:5000/v2.0", "http://10.20.112.226:35357/v2.0", "admin", "aaaaaa", "admin");
+        TenantManager tenantManager = new TenantManager(openstackContext);
+        List<Tenant> tenants = tenantManager.listTenants();
+        for (Tenant tenant : tenants) {
+            System.out.println(tenant);
+        }
+    }
+
+    @Test
     public void testCreateTenant() throws Exception {
         OpenstackContext openstackContext = new OpenstackContext("http://10.20.112.226:5000/v2.0", "http://10.20.112.226:35357/v2.0", "admin", "aaaaaa", "demo");
         TenantManager tenantManager = new TenantManager(openstackContext);
@@ -49,10 +59,5 @@ public class TenantManagerTest {
         Server result = computeManager.createServer(server, volume.getId());
         System.out.println(volume);
         System.out.println(result);
-    }
-
-    @Test
-    public void testCreateVolume() throws Exception {
-
     }
 }

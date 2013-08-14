@@ -1,9 +1,6 @@
 package com.datayes.cloud;
 
-import com.datayes.cloud.access.Auth;
-import com.datayes.cloud.access.Role;
-import com.datayes.cloud.access.Tenant;
-import com.datayes.cloud.access.User;
+import com.datayes.cloud.access.*;
 import com.datayes.cloud.util.JsonUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
@@ -23,7 +20,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
@@ -55,17 +51,8 @@ public class OpenstackContext {
     }
 
     private void init() throws IOException, URISyntaxException, OgnlException {
-        HttpPost post = new HttpPost();
-        post.setURI(new URI(identityServiceUrl + "/tokens"));
-        post.setHeader("Content-Type", "application/json");
-        Auth auth = new Auth(username, password, tenant);
-        post.setEntity(new StringEntity(JsonUtil.toJson(auth)));
-        HttpResponse response = client.execute(post);
-        InputStream is = response.getEntity().getContent();
-        String json = IOUtils.toString(is);
-        System.out.println(json);
-        token = (String) getValue("access.token.id", json);
-        IOUtils.closeQuietly(is);
+        Access access = post(identityServiceUrl + "/tokens", "auth", new Auth(username, password, tenant), "access", Access.class);
+        token = access.getToken().getId();
         System.out.println(token);
     }
 

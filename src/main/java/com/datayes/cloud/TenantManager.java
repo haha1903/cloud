@@ -1,6 +1,8 @@
 package com.datayes.cloud;
 
 import com.datayes.cloud.access.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,6 +13,8 @@ import java.util.List;
  * Time: 下午4:13
  */
 public class TenantManager {
+    private static final Logger log = LoggerFactory.getLogger(TenantManager.class);
+    public static final String PUBLIC_NETWORK = "public";
     private final OpenstackContext ctx;
 
     public TenantManager(OpenstackContext openstackContext) {
@@ -30,7 +34,7 @@ public class TenantManager {
         return ctx.listTenants();
     }
 
-    public void deleteTenant(String name) throws IOException {
+    public void deleteTenant(String name) throws IOException, InterruptedException {
         OpenstackContext tenantContext = new OpenstackContext(ctx.getIdentityServiceUrl(), ctx.getUsername(), ctx.getPassword(), name);
         Tenant tenant = tenantContext.getTenant();
         if (tenant != null) {
@@ -42,7 +46,15 @@ public class TenantManager {
             for (Volume volume : volumes) storageManager.deleteVolume(volume.getId());
             NetworkManager networkManager = new NetworkManager(tenantContext);
             List<Network> networks = networkManager.listNetworks();
-            for (Network network : networks) networkManager.deleteNetwork(network.getId());
+            for (Network network : networks) {
+                if (!PUBLIC_NETWORK.equals(network.getName())) {
+                    try {
+                        networkManager.deleteNetwork(network.getId());
+                    } catch (IOException e) {
+                        log.error("can't delete network, network = {}", network, e);
+                    }
+                }
+            }
             ctx.delete(ctx.getIdentityAdminUrl() + "/tenants/" + tenant.getId());
         }
     }

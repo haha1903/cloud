@@ -1,6 +1,7 @@
 package com.datayes.cloud;
 
 import com.datayes.cloud.access.*;
+import com.datayes.cloud.util.DeleteUtil;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.SimpleType;
 
@@ -62,7 +63,19 @@ public class ComputeManager {
         return ctx.get(ctx.getComputeUrl() + "/servers/" + serverId + "/os-instance-actions", "instanceActions", CollectionType.construct(List.class, SimpleType.construct(Action.class)));
     }
 
-    public void deleteServer(String serverId) throws IOException {
+    public void deleteServer(final String serverId) throws IOException {
         ctx.delete(ctx.getComputeUrl() + "/servers/" + serverId);
+        DeleteUtil.waitStatus(new DeleteUtil.StatusHandler<Server>() {
+                                  @Override
+                                  public Server getStatus() throws IOException {
+                                      return ctx.get(ctx.getComputeUrl() + "/servers/" + serverId, "server", Server.class);
+                                  }
+                              }, new DeleteUtil.StatusChecker<Server>() {
+                                  @Override
+                                  public boolean checkStatus(Server status) throws IOException {
+                                      return status == null;
+                                  }
+                              }
+        );
     }
 }

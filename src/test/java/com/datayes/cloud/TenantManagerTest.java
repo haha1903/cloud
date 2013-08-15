@@ -72,6 +72,12 @@ public class TenantManagerTest {
     }
 
     @Test
+    public void testDeleteTenant() throws Exception {
+        TenantManager tenantManager = new TenantManager(openstackContext);
+        tenantManager.deleteTenant("tenant1");
+    }
+
+    @Test
     public void testListServers() throws Exception {
         OpenstackContext tenant1Context = new OpenstackContext(identityServiceUrl, "admin", "aaaaaa", "tenant1");
         ComputeManager computeManager = new ComputeManager(tenant1Context);
@@ -88,6 +94,7 @@ public class TenantManagerTest {
         List<Volume> volumes = storageManager.listVolumes();
         for (Volume volume : volumes) {
             System.out.println(volume);
+            storageManager.deleteVolume(volume.getId());
         }
     }
 

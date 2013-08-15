@@ -59,17 +59,19 @@ public class OpenstackContext {
 
     private void init() throws IOException {
         Access access = post(identityServiceUrl, "auth", new Auth(username, password, tenantName), "access", Access.class);
-        tenant = access.getToken().getTenant();
-        token = access.getToken().getId();
-        List<ServiceCatalog> serviceCatalogs = access.getServiceCatalogs();
-        for (ServiceCatalog serviceCatalog : serviceCatalogs) {
-            if (typeIs(serviceCatalog, IDENTITY)) identityAdminUrl = getAdminURL(serviceCatalog);
-            if (typeIs(serviceCatalog, COMPUTE)) computeUrl = getInternalURL(serviceCatalog);
-            if (typeIs(serviceCatalog, NETWORK)) networkUrl = getInternalURL(serviceCatalog);
-            if (typeIs(serviceCatalog, IMAGE)) imageUrl = getInternalURL(serviceCatalog);
-            if (typeIs(serviceCatalog, VOLUME)) volumeUrl = getInternalURL(serviceCatalog);
+        if (access != null) {
+            tenant = access.getToken().getTenant();
+            token = access.getToken().getId();
+            List<ServiceCatalog> serviceCatalogs = access.getServiceCatalogs();
+            for (ServiceCatalog serviceCatalog : serviceCatalogs) {
+                if (typeIs(serviceCatalog, IDENTITY)) identityAdminUrl = getAdminURL(serviceCatalog);
+                if (typeIs(serviceCatalog, COMPUTE)) computeUrl = getInternalURL(serviceCatalog);
+                if (typeIs(serviceCatalog, NETWORK)) networkUrl = getInternalURL(serviceCatalog);
+                if (typeIs(serviceCatalog, IMAGE)) imageUrl = getInternalURL(serviceCatalog);
+                if (typeIs(serviceCatalog, VOLUME)) volumeUrl = getInternalURL(serviceCatalog);
+            }
+            log.debug("token = {}", token);
         }
-        log.debug("token = {}", token);
     }
 
     private String getInternalURL(ServiceCatalog serviceCatalog) {
@@ -135,7 +137,7 @@ public class OpenstackContext {
         Map<String, Object> model = new HashMap<String, Object>();
         model.put(requestName, requestObject);
         String json = JsonUtil.toJson(model);
-        log.debug("request json,url = \n{}\njson = \n{}\nX-Auth-Token = \n{}", url, json, token);
+        log.debug("request json post,url = \n{}\njson = \n{}\nX-Auth-Token = \n{}", url, json, token);
         post.setEntity(new StringEntity(json));
         return getResult(execute(post), responseName, responseType);
     }
@@ -169,14 +171,14 @@ public class OpenstackContext {
     }
 
     public <T> T get(String url, String responseName, Class<T> responseType) throws IOException {
-        log.debug("request json,url = \n{}\nX-Auth-Token = \n{}", url, token);
+        log.debug("request json get,url = \n{}\nX-Auth-Token = \n{}", url, token);
         HttpGet get = new HttpGet(url);
         HttpResponse resp = execute(get);
         return getResult(resp, responseName, responseType);
     }
 
     public <T> T get(String url, String responseName, JavaType javaType) throws IOException {
-        log.debug("request json,url = \n{}\nX-Auth-Token = \n{}", url, token);
+        log.debug("request json get,url = \n{}\nX-Auth-Token = \n{}", url, token);
         HttpGet get = new HttpGet(url);
         HttpResponse resp = execute(get);
         return getResult(resp, responseName, javaType);
@@ -192,6 +194,7 @@ public class OpenstackContext {
     }
 
     void delete(String url) throws IOException {
+        log.debug("request json delete,url = \n{}\nX-Auth-Token = \n{}", url, token);
         HttpDelete delete = new HttpDelete(url);
         HttpResponse resp = execute(delete);
         HttpEntity entity = resp.getEntity();

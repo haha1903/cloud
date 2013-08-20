@@ -16,7 +16,9 @@ public class Tenant {
     private long id;
     @Column
     private String name;
+    @Column
     private String admin;
+    private String password;
 
     public long getId() {
         return id;
@@ -42,12 +44,21 @@ public class Tenant {
         this.admin = admin;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public String toString() {
         return "Tenant{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", admin='" + admin + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 }

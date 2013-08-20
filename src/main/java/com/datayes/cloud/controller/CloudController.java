@@ -21,12 +21,24 @@ public class CloudController {
     @Autowired
     private CloudDao cloudDao;
 
+    @RequestMapping("/test")
+    public String test() {
+        return "test";
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String home() {
+        return "redirect:index";
+    }
+
     @RequestMapping("/index")
-    public void test(Map model) {
-        System.out.println("haha");
-        model.put("abc", "kick");
-        model.put("def", "slogan");
-        model.put("a", "bc");
+    public String index() {
+        return "index";
+    }
+
+    @RequestMapping("/haha")
+    public void haha(Map map) {
+        map.put("a", "b");
     }
 
     @RequestMapping(value = "/tenant", method = RequestMethod.POST)

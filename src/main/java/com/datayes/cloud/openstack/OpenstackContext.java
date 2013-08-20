@@ -49,6 +49,9 @@ public class OpenstackContext {
     private String imageUrl;
     private String volumeUrl;
 
+    public OpenstackContext() {
+    }
+
     public OpenstackContext(String identityServiceUrl, String username, String password, String tenantName) throws IOException {
         this.identityServiceUrl = identityServiceUrl;
         this.username = username;
@@ -240,5 +243,21 @@ public class OpenstackContext {
 
     public Tenant getTenant() {
         return tenant;
+    }
+
+    public void setTenantName(String tenantName) {
+        this.tenantName = tenantName;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setIdentityServiceUrl(String identityServiceUrl) {
+        this.identityServiceUrl = identityServiceUrl;
     }
 }

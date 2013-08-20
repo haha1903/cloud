@@ -2,6 +2,7 @@ package com.datayes.cloud.controller;
 
 import com.datayes.cloud.dao.CloudDao;
 import com.datayes.cloud.model.Tenant;
+import com.datayes.cloud.service.TenantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,18 +21,15 @@ import java.util.Map;
 public class CloudController {
     @Autowired
     private CloudDao cloudDao;
-
-    @RequestMapping("/test")
-    public String test() {
-        return "test";
-    }
+    @Autowired
+    private TenantService tenantService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home() {
         return "redirect:index";
     }
 
-    @RequestMapping("/index")
+    @RequestMapping(value = "/index", method = RequestMethod.POST)
     public String index() {
         return "index";
     }
@@ -43,8 +41,6 @@ public class CloudController {
 
     @RequestMapping(value = "/tenant", method = RequestMethod.POST)
     public void createTenant(Map model, @RequestBody Tenant tenant) {
-        System.out.println(tenant);
-        model.put("tenant", tenant);
-        cloudDao.save(tenant);
+        tenantService.create(tenant);
     }
 }

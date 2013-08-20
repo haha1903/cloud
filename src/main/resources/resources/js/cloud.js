@@ -1,3 +1,3 @@
 $(function () {
-    $.ajaxSetup({contentType: 'application/json'});
+    $.ajaxSetup({contentType: 'application/json', dataType: 'json'});
 });

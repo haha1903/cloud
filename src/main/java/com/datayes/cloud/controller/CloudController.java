@@ -29,7 +29,7 @@ public class CloudController {
         return "redirect:index";
     }
 
-    @RequestMapping(value = "/index", method = RequestMethod.POST)
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String index() {
         return "index";
     }

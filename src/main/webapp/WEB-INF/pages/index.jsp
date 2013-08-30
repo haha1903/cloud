@@ -4,7 +4,7 @@
 <%@include file="head.jsp" %>
 <body>
 <%@include file="nav.jsp" %>
-<div class="demo-headline">Portal</div>
+<div class="demo-headline">DataYes</div>
 <div class="container">
     <div class="text-center">
         <div class="row">
@@ -17,7 +17,7 @@
             <input class="span4" name="name" type="text" placeholder="公司"/>
         </div>
         <div class="row">
-            <button id="btn_reg" class="btn btn-primary">注册</button>
+            <button id="btn_reg" class="btn btn-info">注册</button>
         </div>
     </div>
 </div>

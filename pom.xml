@@ -109,5 +109,10 @@
             <artifactId>jstl</artifactId>
             <version>1.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.datayes.paas.sso</groupId>
+            <artifactId>datayes-sso</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 </project>

@@ -1,6 +1,10 @@
 package com.datayes.cloud.model;
 
+import org.hibernate.annotations.ForeignKey;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * User: changhai
@@ -51,6 +55,7 @@ public class CloudService {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
+
 
     @Override
     public String toString() {

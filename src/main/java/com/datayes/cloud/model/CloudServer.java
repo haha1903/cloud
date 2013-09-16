@@ -1,5 +1,7 @@
 package com.datayes.cloud.model;
 
+import org.hibernate.annotations.ForeignKey;
+
 import javax.persistence.*;
 
 /**
@@ -24,6 +26,7 @@ public class CloudServer {
     private String type;
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "tenant_id")
+    @ForeignKey(name = "none")
     private Tenant tenant;
 
     public long getId() {

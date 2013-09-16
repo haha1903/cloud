@@ -28,7 +28,7 @@ public class Server {
     @JsonIgnore
     private int vcpu;
     @JsonIgnore
-    private int ram;
+    private double ram;
     @JsonIgnore
     private int disk;
 
@@ -139,11 +139,11 @@ public class Server {
         this.vcpu = vcpu;
     }
 
-    public int getRam() {
+    public double getRam() {
         return ram;
     }
 
-    public void setRam(int ram) {
+    public void setRam(double ram) {
         this.ram = ram;
     }
 

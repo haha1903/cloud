@@ -1,7 +1,10 @@
 package com.datayes.cloud.service;
 
 import com.datayes.cloud.dao.CloudDao;
-import com.datayes.cloud.model.*;
+import com.datayes.cloud.model.CloudServer;
+import com.datayes.cloud.model.CloudService;
+import com.datayes.cloud.model.Tenant;
+import com.datayes.cloud.model.User;
 import com.datayes.cloud.openstack.OpenstackContext;
 import com.datayes.cloud.openstack.access.Flavor;
 import com.datayes.cloud.openstack.access.Server;
@@ -9,15 +12,24 @@ import com.datayes.cloud.openstack.access.Volume;
 import com.datayes.cloud.openstack.access.VolumeAttachment;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.SimpleType;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.security.ldap.SpringSecurityLdapTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.naming.directory.*;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,11 +47,23 @@ public class UserService {
     private CloudDao cloudDao;
     @Autowired
     private OpenstackContextFactory openstackContextFactory;
-    @Autowired
-    private SpringSecurityLdapTemplate ldapTemplate;
 
     @PostConstruct
-    public void init() {
+    public void init() throws NoSuchAlgorithmException, KeyManagementException {
+        SSLContext sslContext = SSLContext.getInstance("TLS");
+        TrustManager tm = new X509TrustManager() {
+            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+            }
+
+            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+            }
+
+            public X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
+        };
+        sslContext.init(null, new TrustManager[]{tm}, null);
+        SSLContext.setDefault(sslContext);
 //        System.setProperty("javax.net.ssl.trustStore", "/Users/changhai/.keystore");
 //        System.setProperty("javax.net.ssl.trustStorePassword", "tomcat");
     }
@@ -50,11 +74,39 @@ public class UserService {
 
     public void createUser(User user) {
         cloudDao.save(user);
-        String tenantDomain = user.getTenant().getName();
+        Tenant tenant = user.getTenant();
+        SpringSecurityLdapTemplate ldapTemplate = getLdapTemplate(tenant);
         String name = user.getName();
-        ldapTemplate.bind("cn=" + name + ",CN=Users,DC=datayestest,DC=com", null, getUserAttrs(user));
-        ModificationItem[] members = {new ModificationItem(DirContext.ADD_ATTRIBUTE, new BasicAttribute("member", "cn=" + name + ",CN=Users,DC=datayestest,DC=com"))};
-        ldapTemplate.modifyAttributes("CN=Administrators,CN=Builtin,DC=datayestest,DC=com", members);
+        String dc = getDc(tenant);
+        ldapTemplate.bind("cn=" + name + ",cn=users" + dc, null, getUserAttrs(user));
+        BasicAttribute attr = new BasicAttribute("member", "cn=" + name + ",cn=users" + dc);
+        ModificationItem[] members = {new ModificationItem(DirContext.ADD_ATTRIBUTE, attr)};
+        ldapTemplate.modifyAttributes("cn=administrators,cn=builtin" + dc, members);
+    }
+
+    private SpringSecurityLdapTemplate getLdapTemplate(Tenant tenant) {
+        try {
+            String address = tenant.getAddress();
+            LdapContextSource lcs = new LdapContextSource();
+            lcs.setUrl(address);
+            lcs.setUserDn("cn=" + tenant.getAdUser() + ",cn=users" + getDc(tenant));
+            lcs.setPassword(tenant.getAdPassword());
+            lcs.afterPropertiesSet();
+            SpringSecurityLdapTemplate template = new SpringSecurityLdapTemplate(lcs);
+            return template;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String getDc(Tenant tenant) {
+        String domain = tenant.getName();
+        String[] dcs = StringUtils.split(domain, '.');
+        StringBuilder s = new StringBuilder();
+        for (String dc : dcs) {
+            s.append(",dc=").append(dc);
+        }
+        return s.toString();
     }
 
     private Attributes getUserAttrs(User user) {
@@ -146,10 +198,14 @@ public class UserService {
             }
             Volume volume = getVolume(server, volumes);
             server.setVcpu(flavor.getVcpus());
-            server.setRam(flavor.getRam());
+            server.setRam(flavor.getRam() / 1024.0);
             server.setDisk(flavor.getDisk() + (volume == null ? 0 : volume.getSize()));
         }
         return servers;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(512 / 1024.0);
     }
 
     private Volume getVolume(Server server, List<Volume> volumes) {

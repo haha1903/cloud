@@ -2,6 +2,7 @@ package com.datayes.cloud.model;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
 import java.util.List;
@@ -14,7 +15,6 @@ import java.util.List;
  */
 @Entity
 @Table(name = "cloud_user", uniqueConstraints = {@UniqueConstraint(name = "uk_name_tenant_id", columnNames = {"name", "tenant_id"})})
-
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,10 +26,12 @@ public class User {
     private String dept;
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "tenant_id")
+    @ForeignKey(name = "none")
     private Tenant tenant;
     @ManyToMany(fetch = FetchType.EAGER)
     @Fetch(FetchMode.SUBSELECT)
-    @JoinTable(name = "cloud_user_service", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "service_id")})
+    @JoinTable(name = "cloud_user_service", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "service_id"))
+    @ForeignKey(name = "none", inverseName = "none")
     private List<CloudService> services;
 
     public long getId() {

@@ -13,7 +13,6 @@ import java.util.HashMap;
  * User: huhongsi
  * Date: 13-9-2
  * Time: 上午9:05
- * To change this template use File | Settings | File Templates.
  */
 
 public class ServerInitUtil {
@@ -58,7 +57,7 @@ public class ServerInitUtil {
         scripts = new HashMap<String, String>();
         images = new HashMap<String, String>();
         scripts.put(ServerType.ZIMBRA_SERVER.getStrValue(),"serverscript/zimbra/ubuntu12.04/installzimbra-ubuntu12.04-passwd");
-        images.put(ServerType.ZIMBRA_SERVER.getStrValue(),"ubuntu");
+        images.put(ServerType.ZIMBRA_SERVER.getStrValue(),"cirros");
     }
 
     public static String getImageUrl(ServerType type){

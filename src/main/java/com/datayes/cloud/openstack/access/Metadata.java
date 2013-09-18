@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class Metadata {
     private List<String> roles;
-    @JsonProperty("is_admin")
+    @JsonProperty("is_adm–in")
     private int isAdmin;
 
     public List<String> getRoles() {

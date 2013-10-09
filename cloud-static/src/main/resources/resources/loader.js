@@ -18,13 +18,18 @@ requirejs.config({
         util: 'js/util',
         index: 'js/index',
         admin: 'js/admin',
-        sinon: 'lib/sinon/sinon-1.7.3'
+        sinon: 'lib/sinon/sinon-1.7.3',
+        service: 'js/service',
+        app: 'js/app'
     },
     shim: {
         backbone: ['underscore', 'jquery'],
-        util: ['jsrender'],
-        index: ['jquery', 'backbone', 'bootstrap', 'sinon', 'util'],
-        admin: ['jquery', 'backbone', 'bootstrap', 'util']
+        util: ['jquery', 'jsrender'],
+        bootstrap: ['jquery'],
+        service: ['backbone'],
+        app: ['service'],
+        index: ['bootstrap', 'sinon', 'util', 'app'],
+        admin: ['bootstrap', 'sinon', 'util']
     }
 });
 function loadCss(url) {

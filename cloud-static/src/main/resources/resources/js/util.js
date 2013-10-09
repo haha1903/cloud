@@ -42,7 +42,7 @@ if (debug) {
             });
             var done = this.onload;
             $.ajax({
-                url: require.toUrl('') + 'debug' + fxhr.url + '_' + fxhr.method.toLowerCase(),
+                url: require.toUrl('') + 'debug' + fxhr.url,
                 async: fxhr.async,
                 method: fxhr.method,
                 crossDomain: true,

@@ -17,25 +17,14 @@ requirejs.config({
         bootstrap: 'lib/bootstrap/js/bootstrap',
         util: 'js/util',
         index: 'js/index',
-        admin: 'js/admin'
+        admin: 'js/admin',
+        sinon: 'lib/sinon/sinon-1.7.3'
     },
     shim: {
-        backbone: {
-            deps: ['underscore', 'jquery'],
-            exports: 'Backbone'
-        },
-        underscore: {
-            exports: '_'
-        },
-        util: {
-            deps: ['jsrender']
-        },
-        index: {
-            deps: ['jquery', 'backbone', 'bootstrap', 'util']
-        },
-        admin: {
-            deps: ['jquery', 'backbone', 'bootstrap', 'util']
-        }
+        backbone: ['underscore', 'jquery'],
+        util: ['jsrender'],
+        index: ['jquery', 'backbone', 'bootstrap', 'sinon', 'util'],
+        admin: ['jquery', 'backbone', 'bootstrap', 'util']
     }
 });
 function loadCss(url) {
@@ -47,5 +36,5 @@ function loadCss(url) {
 }
 var module = location.search.slice(1);
 module = module || 'index';
-loadCss(module + '.css');
+loadCss('css/' + module + '.css');
 require([module]);

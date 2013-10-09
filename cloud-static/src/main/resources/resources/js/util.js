@@ -28,3 +28,30 @@ function template(name) {
     }
     return $.templates[name];
 }
+var debug = true;
+if (debug) {
+    var xhr = sinon.useFakeXMLHttpRequest();
+    xhr.useFilters = true;
+    xhr.addFilter(function (method, url, async, username, password) {
+        return /\.(js|css|tpl)$/i.test(url);
+    });
+    xhr.onCreate = function (fxhr) {
+        fxhr.onSend = function () {
+            xhr.addFilter(function() {
+                return true;
+            });
+            var done = this.onload;
+            $.ajax({
+                url: require.toUrl('') + 'debug' + fxhr.url + '_' + fxhr.method.toLowerCase(),
+                async: fxhr.async,
+                method: fxhr.method,
+                crossDomain: true,
+                dataType: 'text'
+            }).done(function(data, status) {
+                    fxhr.responseText = data;
+                    done.apply(fxhr);
+                });
+            xhr.filters.pop();
+        }
+    };
+}

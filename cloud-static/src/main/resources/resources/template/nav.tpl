@@ -4,6 +4,5 @@
         <li class="active" id="service-list"><a href="#">服务列表</a></li>
         <li id="user-manager"><a href="#">用户管理</a></li>
         <li id="resource-manager"><a href="#">云资源管理</a></li>
-        <li id="help"><a href="#">帮助</a></li>
     </ul>
 </div>

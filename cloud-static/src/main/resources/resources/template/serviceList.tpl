@@ -3,7 +3,7 @@
 
     <div class="panel panel-default">
         <!-- Default panel contents -->
-        <div class="panel-heading">交易服务</div>
+        <div class="panel-heading">交易服务<span class="glyphicon glyphicon-refresh refresh pull-right"></span></div>
         <!-- Table -->
         <table class="table trading-service">
             <tr>
@@ -16,7 +16,7 @@
     </div>
     <div class="panel panel-default">
         <!-- Default panel contents -->
-        <div class="panel-heading">办公服务</div>
+        <div class="panel-heading">办公服务<span class="glyphicon glyphicon-refresh refresh pull-right"></span></div>
         <!-- Table -->
         <table class="table">
             <tr>

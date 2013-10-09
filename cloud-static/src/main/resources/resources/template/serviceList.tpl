@@ -2,18 +2,21 @@
     <h1>服务列表</h1>
 
     <div class="panel panel-default">
-        <div class="panel-heading">交易服务<span class="glyphicon glyphicon-refresh refresh pull-right"></span></div>
-        <table class="table trading-service">
+        <div class="panel-heading">交易服务<span class="glyphicon glyphicon-refresh refresh pull-right"/></div>
+        <table class="table-striped table trading-service">
+            <tbody></tbody>
         </table>
     </div>
     <div class="panel panel-default">
-        <div class="panel-heading">办公服务<span class="glyphicon glyphicon-refresh refresh pull-right"></span></div>
-        <table class="table office-service">
+        <div class="panel-heading">办公服务<span class="glyphicon glyphicon-refresh refresh pull-right"/></div>
+        <table class="table-striped table office-service">
+            <tbody></tbody>
         </table>
     </div>
     <div class="panel panel-default">
-        <div class="panel-heading">其它<span class="glyphicon glyphicon-refresh refresh pull-right"></span></div>
-        <table class="table other-service">
+        <div class="panel-heading">其它<span class="glyphicon glyphicon-refresh refresh pull-right"/></div>
+        <table class="table-striped table other-service">
+            <tbody></tbody>
         </table>
     </div>
 </div>

@@ -1,6 +1,6 @@
 function active(view, e) {
     view.$el.find('.active').removeClass('active');
-    $(e.currentTarget).addClass('active');
+    $(e.target).parent().addClass('active');
 }
 var TopView = Backbone.View.extend({
     el: '#top',
@@ -41,17 +41,40 @@ var NavView = Backbone.View.extend({
     userManager: function (e) {
         active(this, e);
         $('#content').html(template('userManager').render());
-        console.log('user manager');
     },
     resourceManager: function (e) {
         active(this, e);
-        $('#content').empty().append(template('resourceManager').render());
+        $('#content').html(template('resourceManager').render());
         console.log('resource manager');
     },
     render: function () {
         this.$el.html(this.template.render());
-        $('#service-list').trigger('click');
     }
+});
+var AppRouter = Backbone.Router.extend({
+    routes: {
+        '': 'index',
+        'services': 'services',
+        'users': 'users',
+        'resources': 'resources',
+        'help': 'help'
+    },
+    index: function() {
+        $('#service-list').trigger('click');
+    },
+    services: function() {
+        $('#service-list').trigger('click');
+    },
+    users: function() {
+        $('#user-manager').trigger('click');
+    },
+    resources: function() {
+        $('#resource-manager').trigger('click');
+    },
+    help: function() {
+        $('#help').trigger('click');
+    }
+
 });
 var AppView = Backbone.View.extend({
     el: 'body',
@@ -60,6 +83,7 @@ var AppView = Backbone.View.extend({
         this.$el.html(this.template.render());
         this.topView = new TopView();
         this.navView = new NavView();
+        this.router = new AppRouter();
     },
     render: function () {
         this.topView.render();

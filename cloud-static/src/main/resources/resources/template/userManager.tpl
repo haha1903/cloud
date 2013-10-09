@@ -1,41 +1,18 @@
 <div id="userManager">
-    <h1>用户列表</h1>
+    <h1>用户管理</h1>
 
     <div class="panel panel-default">
-        <!-- Default panel contents -->
-        <div class="panel-heading">交易服务</div>
-        <!-- Table -->
+        <div class="panel-heading">用户管理<span class="glyphicon glyphicon-refresh refresh pull-right"/></div>
         <table class="table">
             <tr>
-                <th>title</th>
-                <th>title</th>
-                <th>title</th>
-                <th>title</th>
-            </tr>
-            <tr>
-                <td>value1</td>
-                <td>value1</td>
-                <td>value1</td>
-                <td>value1</td>
-            </tr>
-        </table>
-    </div>
-    <div class="panel panel-default">
-        <!-- Default panel contents -->
-        <div class="panel-heading">办公服务</div>
-        <!-- Table -->
-        <table class="table">
-            <tr>
-                <th>title</th>
-                <th>title</th>
-                <th>title</th>
-                <th>title</th>
-            </tr>
-            <tr>
-                <td>value1</td>
-                <td>value1</td>
-                <td>value1</td>
-                <td>value1</td>
+                <th>全部用户</th>
+                <th>用户名</th>
+                <th>部门</th>
+                <th>企业邮箱</th>
+                <th>社交办公</th>
+                <th>组合管理</th>
+                <th>交易系统</th>
+                <th>行情数据服务</th>
             </tr>
         </table>
     </div>

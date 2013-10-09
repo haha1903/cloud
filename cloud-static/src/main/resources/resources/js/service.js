@@ -37,7 +37,7 @@ var ServiceListView = Backbone.View.extend({
     },
     add: function (service) {
         var serviceView = new ServiceView({model: service});
-        $('.' + service.get('type') + '-service').append(serviceView.render().el);
+        $('.' + service.get('type') + '-service tbody').append(serviceView.render().el);
     },
     addAll: function () {
         this.collection.each(this.add);

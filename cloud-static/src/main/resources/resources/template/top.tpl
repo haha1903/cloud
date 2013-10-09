@@ -10,8 +10,8 @@
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li id="index" class="active"><a href="#">首页</a></li>
-                <li id="help"><a href="#">帮助中心</a></li>
+                <li class="active"><a id="index" href="#">首页</a></li>
+                <li><a id="help" href="#help">帮助中心</a></li>
             </ul>
         </div>
         <!--/.nav-collapse -->

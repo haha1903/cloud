@@ -1,6 +1,6 @@
 function active(view, e) {
     view.$el.find('.active').removeClass('active');
-    $(e.target).parent().addClass('active');
+    $(e.target).blur().parent().addClass('active');
 }
 var TopView = Backbone.View.extend({
     el: '#top',
@@ -32,15 +32,16 @@ var NavView = Backbone.View.extend({
         'click #resource-manager': 'resourceManager'
     },
     initialize: function () {
-        this.serviceListView = new ServiceListView();
+        this.servicesView = new ServicesView();
+        this.usersView = new UsersView();
     },
     serviceList: function (e) {
         active(this, e);
-        this.serviceListView.render();
+        this.servicesView.render();
     },
     userManager: function (e) {
         active(this, e);
-        $('#content').html(template('userManager').render());
+        this.usersView.render();
     },
     resourceManager: function (e) {
         active(this, e);

@@ -20,6 +20,7 @@ requirejs.config({
         admin: 'js/admin',
         sinon: 'lib/sinon/sinon-1.7.3',
         service: 'js/service',
+        user: 'js/user',
         app: 'js/app'
     },
     shim: {
@@ -27,7 +28,8 @@ requirejs.config({
         util: ['jquery', 'jsrender'],
         bootstrap: ['jquery'],
         service: ['backbone'],
-        app: ['service'],
+        user: ['backbone'],
+        app: ['service', 'user'],
         index: ['bootstrap', 'sinon', 'util', 'app'],
         admin: ['bootstrap', 'sinon', 'util']
     }

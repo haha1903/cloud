@@ -1,7 +1,7 @@
 #nav {
     margin-bottom: 20px;
 }
-.refresh {
+.service-refresh,.user-refresh {
     cursor: pointer;
 }
 .table-striped > tbody > tr:nth-child(odd) > td,

@@ -18,12 +18,12 @@ var ServiceView = Backbone.View.extend({
         alert('remove');
     }
 });
-var ServiceListView = Backbone.View.extend({
+var ServicesView = Backbone.View.extend({
     el: '#content',
     template: template('serviceList'),
     collection: new Services(),
     events: {
-        'click .refresh': 'refresh'
+        'click .service-refresh': 'refresh'
     },
     initialize: function () {
         this.collection.bind('add', this.add, this);

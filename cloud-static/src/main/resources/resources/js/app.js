@@ -34,6 +34,7 @@ var NavView = Backbone.View.extend({
     initialize: function () {
         this.servicesView = new ServicesView();
         this.usersView = new UsersView();
+        this.resourcesView = new ResourcesView();
     },
     serviceList: function (e) {
         active(this, e);
@@ -45,8 +46,7 @@ var NavView = Backbone.View.extend({
     },
     resourceManager: function (e) {
         active(this, e);
-        $('#content').html(template('resourceManager').render());
-        console.log('resource manager');
+        this.resourcesView.render();
     },
     render: function () {
         this.$el.html(this.template.render());

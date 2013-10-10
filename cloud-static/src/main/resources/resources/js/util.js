@@ -18,9 +18,10 @@ $(function () {
         };
     });
 });
+var staticPath = require.toUrl('');
 function template(name) {
     if (!$.templates[name]) {
-        $.ajax({url: require.toUrl('') + 'template/' + name + '.tpl',
+        $.ajax({url: staticPath + 'template/' + name + '.tpl',
             dataType: 'text',
             async: false}).done(function(html) {
                 $.templates(name, html);
@@ -28,6 +29,9 @@ function template(name) {
     }
     return $.templates[name];
 }
+$.views.helpers({s: function(url) {
+    return staticPath + url;
+}});
 var debug = true;
 if (debug) {
     var xhr = sinon.useFakeXMLHttpRequest();
@@ -42,7 +46,7 @@ if (debug) {
             });
             var done = this.onload;
             $.ajax({
-                url: require.toUrl('') + 'debug' + fxhr.url,
+                url: staticPath + 'debug' + fxhr.url,
                 async: fxhr.async,
                 method: fxhr.method,
                 crossDomain: true,

@@ -61,7 +61,7 @@ public class CloudController {
         return "users";
     }
 
-    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    @RequestMapping(value = "/user2", method = RequestMethod.POST)
     public void addUser(@RequestBody User user) {
         User currentUser = getCurrentUser();
         user.setTenant(currentUser.getTenant());
@@ -74,7 +74,7 @@ public class CloudController {
         return userService.getUser(exampl);
     }
 
-    @RequestMapping(value = "/user", method = RequestMethod.PUT)
+    @RequestMapping(value = "/user2", method = RequestMethod.PUT)
     public void addUserService(long id, @RequestBody CloudService service) throws CloudException {
         User user = userService.getUser(id);
         List<CloudService> cloudServices = userService.getService(service);

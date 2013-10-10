@@ -14,7 +14,8 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "cloud_tenant")
-public class Tenant {
+public class
+        Tenant {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;

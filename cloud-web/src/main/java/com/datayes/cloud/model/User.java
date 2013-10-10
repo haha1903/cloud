@@ -24,7 +24,7 @@ public class User {
     private transient String password;
     @Column
     private String dept;
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "tenant_id")
     @ForeignKey(name = "none")
     private Tenant tenant;
